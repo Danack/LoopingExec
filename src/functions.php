@@ -52,24 +52,31 @@ function nullLogger(string $message)
 }
 
 /**
- * Repeatedly calls a callable until it's time to stop
+ *
  *
  * @param callable $callable - the thing to run
  * @param int $secondsBetweenRuns - the minimum time between runs in milliseconds
  * @param int $sleepTime - the time to sleep between runs in milliseconds
  * @param int $maxRunTime - the max time to run for, before returning in seconds
  */
+
+/**
+ * Repeatedly calls a callable until it's time to stop
+ *
+ *
+ * @param $callable - the callable  to run
+ * @param int $maxRunTimeInSeconds the max time to run for, before returning in seconds
+ * @param int $minimumTimeBetweenRunsInMilliseconds - the minimum time between runs in milliseconds
+ */
 function continuallyExecuteCallable(
     $callable,
-    int $minimumTimeBetweenRuns,
-    int $sleepTimeBetweenRuns,
-    int $maxRunTime
+    int $maxRunTimeInSeconds,
+    int $minimumTimeBetweenRunsInMilliseconds
 ) {
     continuallyExecuteCallableEx(
         $callable,
-        $maxRunTime,
-        $minimumTimeBetweenRuns,
-        $sleepTimeBetweenRuns,
+        $maxRunTimeInSeconds,
+        $minimumTimeBetweenRunsInMilliseconds,
         50,
         'LoopingExec\nullLogger'
     );
