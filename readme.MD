@@ -3,6 +3,12 @@
 
 A function library to allow repeatedly running a callable for a certain amount of time before returning.
 
+Please note, parameters are open to change.
+
+This code is currently taken directly from where it was being used in a project. There is a good argument for completely 'over-egging' the checks done in the loop for whether the code should run this time and whether a sleep should occur between runs.
+
+But I'm not going to do that today.
+
 ## Example
 
 ```php
