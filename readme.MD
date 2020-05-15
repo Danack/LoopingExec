@@ -5,7 +5,7 @@ A function library to allow repeatedly running a callable for a certain amount o
 
 ## Example
 
-```
+```php
 
 <?php
 
