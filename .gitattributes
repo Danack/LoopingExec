@@ -1,0 +1,4 @@
+# .gitattributes file
+
+composer.phar export-ignore
+tests export-ignore
