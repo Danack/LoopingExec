@@ -15,6 +15,7 @@ class FunctionsTest extends BaseTestCase
     public function testBasic()
     {
         $counter = 0;
+        sleep(3);
 
         $fn = function () use (&$counter) {
             $counter += 1;
@@ -34,6 +35,7 @@ class FunctionsTest extends BaseTestCase
             $logger
         );
 
-        $this->assertSame(50, $counter);
+        $this->assertGreaterThanOrEqual(40, $counter);
+        $this->assertLessThanOrEqual(50, $counter);
     }
 }

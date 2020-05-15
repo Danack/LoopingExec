@@ -127,4 +127,3 @@ function continuallyExecuteCallableEx(
 
     $loggerCallable("Finishing continuallyExecuteCallable");
 }
-
