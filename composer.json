@@ -20,6 +20,9 @@
       "ext-pcntl": "*"
     },
     "autoload": {
+        "psr-4": {
+            "LoopingExec\\": "src/"
+        },
         "files": [
             "src/functions.php"
         ]

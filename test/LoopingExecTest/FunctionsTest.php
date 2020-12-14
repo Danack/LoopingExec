@@ -27,11 +27,15 @@ class FunctionsTest extends BaseTestCase
             $lines[] = $message;
         };
 
+        $loopManager = new \LoopingExec\TimeExecControl(
+            $maxRunTime = 5,
+            $minimumTimeBetweenRunsInMilliseconds = 100,
+            $spinTime = 50
+        );
+
         continuallyExecuteCallableEx(
             $fn,
-            5,
-            100,
-            50,
+            $loopManager,
             $logger
         );
 

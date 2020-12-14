@@ -73,11 +73,11 @@ function continuallyExecuteCallable(
     int $maxRunTimeInSeconds,
     int $minimumTimeBetweenRunsInMilliseconds
 ) {
+
+    $loopManager = new TimeExecControl($maxRunTimeInSeconds, $minimumTimeBetweenRunsInMilliseconds, 50);
     continuallyExecuteCallableEx(
         $callable,
-        $maxRunTimeInSeconds,
-        $minimumTimeBetweenRunsInMilliseconds,
-        50,
+        $loopManager,
         'LoopingExec\nullLogger'
     );
 }
@@ -93,42 +93,29 @@ function continuallyExecuteCallable(
  */
 function continuallyExecuteCallableEx(
     $callable,
-    int $maxRunTime,
-    int $minimumTimeBetweenRuns,
-    int $spinTime,
+    ExecControl $execControl,
     $loggerCallable
 ) {
-    $startTime = microtime(true);
-    $lastRuntime = 0;
+
     $finished = false;
 
-    $minimumTimeBetweenRunsInMilliseconds = $minimumTimeBetweenRuns / 1000.0;
-
+    $execControl->start();
     $loggerCallable("starting continuallyExecuteCallable");
     while ($finished === false) {
-        $shouldRunThisLoop = false;
-        if ($minimumTimeBetweenRuns === 0) {
-            $shouldRunThisLoop = true;
-        }
-        else if ((microtime(true) - $lastRuntime) > $minimumTimeBetweenRunsInMilliseconds) {
-            $shouldRunThisLoop = true;
-        }
-
+        $shouldRunThisLoop = $execControl->shouldRun();
         if ($shouldRunThisLoop === true) {
             $callable();
-            $lastRuntime = microtime(true);
-        }
-        else if ($spinTime != 0) {
-            usleep($spinTime);
+            $execControl->wasRun();
         }
 
         if (checkSignalsForExit()) {
+            $loggerCallable("Exiting after signal");
             break;
         }
 
-        if ((microtime(true) - $startTime) > $maxRunTime) {
-            $loggerCallable("Reach maxRunTime - finished = true");
+        if ($execControl->shouldEnd() === true) {
             $finished = true;
+            $loggerCallable("Reach maxRunTime - finished = true");
         }
     }
 
