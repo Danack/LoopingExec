@@ -15,6 +15,8 @@ class RateLimitExecControl implements ExecControl
 
     private int $timePeriod;
 
+    private int $setTimeLimit;
+
     /**
      * A recording of the the when a run was completed
      * @var float[]
@@ -25,12 +27,14 @@ class RateLimitExecControl implements ExecControl
         int $numberPerTimePeriod,
         int $timePeriod,
         int $maxRunTime,
-        int $spinTimeInMilliseconds
+        int $spinTimeInMilliseconds,
+        int $setTimeLimitInSeconds
     ) {
         $this->maxRunTime = $maxRunTime;
         $this->spinTimeInMilliseconds = $spinTimeInMilliseconds;
         $this->runsPerTimePeriod = $numberPerTimePeriod;
         $this->timePeriod = $timePeriod;
+        $this->setTimeLimit = $setTimeLimitInSeconds;
     }
 
 
@@ -41,6 +45,7 @@ class RateLimitExecControl implements ExecControl
 
     public function shouldEnd(): bool
     {
+
         if ((microtime(true) - $this->startTime) > $this->maxRunTime) {
             return true;
         }
@@ -62,15 +67,22 @@ class RateLimitExecControl implements ExecControl
 
     public function shouldRun(): bool
     {
+        set_time_limit($this->setTimeLimit);
         $this->discardOldRunTimes();
-        return (count($this->runTimes) < $this->runsPerTimePeriod);
+
+        if (count($this->runTimes) < $this->runsPerTimePeriod) {
+            return true;
+        };
+
+        if ($this->spinTimeInMilliseconds !== 0) {
+            usleep($this->spinTimeInMilliseconds * 1000);
+        }
+
+        return false;
     }
 
     public function wasRun(): void
     {
         $this->runTimes[] = microtime(true);
-        if ($this->spinTimeInMilliseconds != 0) {
-            usleep($this->spinTimeInMilliseconds * 1000);
-        }
     }
 }

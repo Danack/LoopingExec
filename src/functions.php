@@ -74,7 +74,12 @@ function continuallyExecuteCallable(
     int $minimumTimeBetweenRunsInMilliseconds
 ) {
 
-    $loopManager = new TimeExecControl($maxRunTimeInSeconds, $minimumTimeBetweenRunsInMilliseconds, 50);
+    $loopManager = new TimeExecControl(
+        $maxRunTimeInSeconds,
+        $minimumTimeBetweenRunsInMilliseconds,
+        50,
+        60
+    );
     continuallyExecuteCallableEx(
         $callable,
         $loopManager,
@@ -115,7 +120,7 @@ function continuallyExecuteCallableEx(
 
         if ($execControl->shouldEnd() === true) {
             $finished = true;
-            $loggerCallable("Reach maxRunTime - finished = true");
+            $loggerCallable("execControl said that looping should end.");
         }
     }
 

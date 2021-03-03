@@ -30,7 +30,8 @@ class FunctionsTest extends BaseTestCase
         $loopManager = new \LoopingExec\TimeExecControl(
             $maxRunTime = 5,
             $minimumTimeBetweenRunsInMilliseconds = 100,
-            $spinTime = 50
+            $spinTime = 50,
+            60
         );
 
         continuallyExecuteCallableEx(

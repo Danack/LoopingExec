@@ -22,7 +22,8 @@ class RateLimitExecControlTest extends BaseTestCase
             $numberPerTimePeriod = 2,
             $timePeriod = 10,
             $maxRunTime = 30,
-            20
+            20,
+            60
         );
 
         $execCounter = 0;
